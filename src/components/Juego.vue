@@ -20,9 +20,10 @@
     },
     data () {
       return {
-        square: this.isHard ? 6 : 3,
-        colors: [],
-        colorGanador: ""
+       square: this.isHard ? 6 : 3,
+       colors: [],
+       //cambie colorGanador por colorG
+       colorG: ""
       }
     },
     watch:{
@@ -44,12 +45,15 @@
       //recorro la cant de cuadrados y le asigno un color backgrond y selecciono un ganador
       crearColores(){
         this.colors=[]
+        
+
         for (let i = 0; i < this.square; i++) {
           this.colors.push(this.createRandomStringColor());
           
         }
-        this.colorGanador=this.colors[this.pickColor()].background;
-        this.$emit("obtenerGanador",this.colorGanador)
+        this.colorG=this.colors[this.pickColor()].background;
+        //this.$emit("obtenerGanador",this.colorG)
+        this.$store.dispatch('getObtenerGanador',this.colorG)
         
       },
      
@@ -64,20 +68,22 @@
     },
     
       verificarColor(event){
-        let cuadradroGanador = event.target.style.background == this.colorGanador
+        let cuadradroGanador = event.target.style.background == this.colorG
          this.$emit("evaluarGanador",cuadradroGanador)
         if(cuadradroGanador){
-          this.cambiarCuadradorAlcolorGanador(this.colorGanador)
+          this.cambiarCuadradorAlColorGanador(this.colorG)
           
         }else{
           event.target.style.background = "#232323"
         }
        
       },
-      cambiarCuadradorAlcolorGanador(colorGanador){
+      cambiarCuadradorAlColorGanador(colorG){
         this.colors.forEach(cuadrado => {
-          cuadrado.background =colorGanador;
+          cuadrado.background =colorG;
         });
+        //agrege
+         this.$store.dispatch('getColorsCuadrados',this.colors)
       }
 }
 }
